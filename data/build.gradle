@@ -2,8 +2,15 @@ apply plugin: 'java-library'
 apply plugin: 'kotlin'
 
 dependencies {
+    // Modules dependencies
+    implementation project(":domain")
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    // Dagger
+    implementation "com.google.dagger:dagger-android:$dagger_version"
+
 }
 
 sourceCompatibility = "1.7"
