@@ -1,9 +1,16 @@
 <resources>
-    <string name="app_name">SpotifyPanel</string>
+    <string name="app_name">Spotify Panel</string>
+
+    <!-- Buttons -->
+    <string name="button_retry">Retry</string>
+
+    <!-- Errors -->
+    <string name="error_albums_error_message">There was an error and we could not get the albums. Please try it again.</string>
 
     <!-- Albums list -->
     <string name="albums_list_fragment_label">Albums</string>
     <string name="share_icon_content_description">Share album</string>
     <string name="album_image_content_description">Album image</string>
-
+    <string name="release_date_title">Release date: %1s</string>
+    <string name="share_album">Share album…</string>
 </resources>

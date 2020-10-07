@@ -5,12 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import cat.jorcollmar.domain.usecase.GetAlbums
+import cat.jorcollmar.spotifypanel.ui.album.mapper.AlbumMapper
 import cat.jorcollmar.spotifypanel.ui.album.model.Album
 import io.reactivex.functions.Consumer
 import javax.inject.Inject
 
 class AlbumViewModel @Inject constructor(
-    private val getAlbums: GetAlbums
+    private val getAlbums: GetAlbums,
+    private val albumMapper: AlbumMapper
 ) : ViewModel() {
 
     private val _albums = MutableLiveData<List<Album>>()
@@ -30,11 +32,24 @@ class AlbumViewModel @Inject constructor(
 
         getAlbums.execute(
             Consumer {
-                Log.d("TRYYYYYYYY", it.size.toString())
+                Log.d(TAG, "GetAlbums: OK. Albums: ${it.size}")
+                _loading.value = false
+                _albums.value = albumMapper.map(it)
             }, Consumer {
-                Log.d("TRYYYYYYYY", it?.localizedMessage ?: "")
+                Log.e(TAG, "GetAlbums: KO. Error: ${it.localizedMessage}")
+                _loading.value = false
+                _error.value = ERROR_ALBUMS
             }, GetAlbums.Params()
         )
+    }
 
+    override fun onCleared() {
+        super.onCleared()
+        getAlbums.dispose()
+    }
+
+    companion object {
+        private const val TAG = "AlbumViewModel"
+        const val ERROR_ALBUMS = 1000
     }
 }

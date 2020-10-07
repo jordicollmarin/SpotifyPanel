@@ -2,24 +2,15 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/album_item_size"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/dimen_10">
+    android:layout_margin="@dimen/item_margin"
+    app:cardCornerRadius="@dimen/corner_radius"
+    app:cardUseCompatPadding="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/imvAlbumShare"
-            android:layout_width="@dimen/album_share_icon_size"
-            android:layout_height="@dimen/album_share_icon_size"
-            android:layout_margin="@dimen/dimen_10"
-            android:contentDescription="@string/share_icon_content_description"
-            android:src="@drawable/ic_share_black"
-            app:layout_constraintBottom_toTopOf="@id/imvAlbum"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/imvAlbum"
@@ -28,30 +19,46 @@
             android:contentDescription="@string/album_image_content_description"
             android:scaleType="center"
             android:src="@mipmap/ic_launcher_round"
-            app:layout_constraintBottom_toTopOf="@+id/txvAlbumName"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imvAlbumShare" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imvAlbumShare"
+            android:layout_width="@dimen/album_share_icon_size"
+            android:layout_height="@dimen/album_share_icon_size"
+            android:layout_margin="@dimen/item_margin"
+            android:contentDescription="@string/share_icon_content_description"
+            android:src="@drawable/ic_share_black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/txvAlbumName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dimen_10"
+            android:layout_marginStart="@dimen/dimen_10"
+            android:layout_marginLeft="@dimen/dimen_10"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="@dimen/text_title"
+            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/txvAlbumReleaseDate"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imvAlbum"
+            app:layout_constraintEnd_toStartOf="@+id/imvAlbumShare"
+            app:layout_constraintStart_toEndOf="@id/imvAlbum"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="Album name" />
 
         <TextView
             android:id="@+id/txvAlbumReleaseDate"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dimen_10"
+            android:layout_marginStart="@dimen/dimen_10"
+            android:layout_marginLeft="@dimen/dimen_10"
+            android:textSize="@dimen/text_subtitle"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imvAlbumShare"
+            app:layout_constraintStart_toEndOf="@id/imvAlbum"
+            app:layout_constraintTop_toBottomOf="@id/txvAlbumName"
             tools:text="08/08/2020" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

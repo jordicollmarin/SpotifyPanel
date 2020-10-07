@@ -9,4 +9,14 @@ data class Album(
     val artist: Artist?,
     val label: String?,
     val tracks: Int?
-)
+) {
+    fun getShareLink(): String? = externalUrls?.get(SPOTIFY)
+
+    fun getSmallImage(): String? = images?.get(1)?.url
+
+    fun getBigImage(): String? = images?.get(0)?.url
+
+    companion object {
+        const val SPOTIFY = "spotify"
+    }
+}
