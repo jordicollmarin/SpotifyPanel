@@ -1,12 +1,12 @@
-package cat.jorcollmar.spotifypanel.ui.album.model
+package cat.jorcollmar.domain.model
 
-data class Album(
+data class AlbumDomain(
     val id: String,
     val name: String?,
-    val images: List<AlbumImage>?,
+    val images: List<AlbumImageDomain>?,
     val releaseDate: String?,
     val externalUrls: Map<String, String>?,
-    val artist: Artist?,
+    val artist: ArtistDomain?,
     val label: String?,
     val tracks: Int?
 )
