@@ -44,11 +44,17 @@ class AlbumsAdapter(
         fun loadAlbum(album: Album) = with(itemView) {
             setOnClickListener { onAlbumClick(album) }
 
-            album.shareLink?.let { shareLink ->
-                albumItemBinding.imvAlbumShare.setOnClickListener { onShareAlbumClick(shareLink) }
+            album.externalUrls?.let { shareLink ->
+                albumItemBinding.imvAlbumShare.setOnClickListener {
+                    onShareAlbumClick(
+                        shareLink["spotify"] ?: run { "" }
+                    )
+                }
             }
 
-            albumItemBinding.imvAlbum.loadImage(Uri.parse(album.image))
+            album.images?.let {
+                albumItemBinding.imvAlbum.loadImage(Uri.parse(it[0].url))
+            }
 
             album.name?.let {
                 albumItemBinding.txvAlbumName.text = it
