@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Text sizes -->
+    <dimen name="text_title">18sp</dimen>
+    <dimen name="text_subtitle">12sp</dimen>
+    <dimen name="text_normal">10sp</dimen>
+
+    <!-- General dimensions -->
+    <dimen name="dimen_10">10dp</dimen>
+
+    <!-- Albums list -->
+    <dimen name="album_item_size">160dp</dimen>
+    <dimen name="album_share_icon_size">30dp</dimen>
+
+</resources>

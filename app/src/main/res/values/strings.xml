@@ -3,5 +3,7 @@
 
     <!-- Albums list -->
     <string name="albums_list_fragment_label">Albums</string>
+    <string name="share_icon_content_description">Share album</string>
+    <string name="album_image_content_description">Album image</string>
 
 </resources>
