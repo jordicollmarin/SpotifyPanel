@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">@color/japanese_laurel</color>
+    <color name="colorPrimaryDark">@color/killarney</color>
+    <color name="colorAccent">@color/mint_green</color>
+
+    <!-- General colors -->
+    <color name="japanese_laurel">#00AF00</color>
+    <color name="killarney">#306930</color>
+    <color name="mint_green">#8BFE8B</color>
 </resources>

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SpotifyPanel</string>
+
+    <!-- Albums list -->
+    <string name="albums_list_fragment_label">Albums</string>
+
 </resources>

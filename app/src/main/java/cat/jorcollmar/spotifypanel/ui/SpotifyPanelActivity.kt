@@ -1,15 +1,19 @@
 package cat.jorcollmar.spotifypanel.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import cat.jorcollmar.spotifypanel.R
-import dagger.android.AndroidInjection
-import dagger.android.AndroidInjector
+import cat.jorcollmar.spotifypanel.databinding.ActivitySpotifyPanelBinding
+import dagger.android.support.DaggerAppCompatActivity
 
-class SpotifyPanelActivity : AppCompatActivity() {
+class SpotifyPanelActivity : DaggerAppCompatActivity() {
+    lateinit var binding: ActivitySpotifyPanelBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
+        // Replace Splash theme with a NoActionBar theme
+        setTheme(R.style.AppTheme_NoActionBar)
+
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_spotify_panel)
+        binding = ActivitySpotifyPanelBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 }
