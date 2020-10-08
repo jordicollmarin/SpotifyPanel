@@ -1,6 +1,6 @@
 package cat.jorcollmar.spotifypanel.ui.album.model
 
 data class Artist(
-    val id: Int,
+    val id: String,
     val name: String?
 )

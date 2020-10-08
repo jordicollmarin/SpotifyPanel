@@ -6,7 +6,7 @@ data class AlbumDto(
     val images: List<AlbumImageDto>?,
     val release_date: String?,
     val external_urls: Map<String, String>?,
-    val artist: ArtistDto?,
+    val artists: List<ArtistDto>?,
     val label: String?,
     val tracks: PagedTrackDto?
 )

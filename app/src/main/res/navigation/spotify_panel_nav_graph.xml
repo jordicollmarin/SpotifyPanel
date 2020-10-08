@@ -9,5 +9,15 @@
         android:id="@+id/albumsListFragment"
         android:name="cat.jorcollmar.spotifypanel.ui.album.view.AlbumsListFragment"
         android:label="@string/albums_list_fragment_label"
-        tools:layout="@layout/fragment_albums_list" />
+        tools:layout="@layout/fragment_albums_list">
+
+        <action
+            android:id="@+id/action_AlbumsListFragment_to_AlbumDetailsFragment"
+            app:destination="@+id/albumDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/albumDetailsFragment"
+        android:name="cat.jorcollmar.spotifypanel.ui.album.view.AlbumDetailsFragment"
+        android:label="@string/album_detail_fragment_label"
+        tools:layout="@layout/fragment_album_details" />
 </navigation>

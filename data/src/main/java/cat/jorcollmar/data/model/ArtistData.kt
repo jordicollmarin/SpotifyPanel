@@ -1,6 +1,6 @@
 package cat.jorcollmar.data.model
 
 data class ArtistData(
-    val id: Int,
+    val id: String,
     val name: String?
 )

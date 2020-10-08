@@ -16,7 +16,7 @@ class AlbumDtoMapper @Inject constructor(
             unmapped.images?.let { albumImageDataMapper.map(it) },
             unmapped.release_date,
             unmapped.external_urls,
-            unmapped.artist?.let { artistDataMapper.map(it) },
+            unmapped.artists?.let { artistDataMapper.map(it[0]) },
             unmapped.label,
             unmapped.tracks?.total
 

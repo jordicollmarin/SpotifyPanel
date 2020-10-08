@@ -18,4 +18,7 @@ class SpotifyApiDataSource @Inject constructor(
             }
         }
 
+    fun getAlbumDetails(albumId: String): Single<AlbumData> =
+        spotifyWebservice.getAlbumDetails(albumId).map { albumDtoMapper.map(it) }
+
 }

@@ -20,3 +20,19 @@ fun ImageView.loadImage(uri: Uri?) {
             }
         })
 }
+
+fun ImageView.loadImageCenterCrop(uri: Uri?) {
+    Picasso
+        .get()
+        .load(uri)
+        .placeholder(R.drawable.placeholder)
+        .into(this, object : Callback {
+            override fun onSuccess() {
+                scaleType = ImageView.ScaleType.CENTER_CROP
+            }
+
+            override fun onError(e: Exception) {
+                setImageDrawable(ContextCompat.getDrawable(context, R.drawable.error))
+            }
+        })
+}

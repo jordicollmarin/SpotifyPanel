@@ -1,6 +1,6 @@
 package cat.jorcollmar.domain.model
 
 data class ArtistDomain(
-    val id: Int,
+    val id: String,
     val name: String?
 )

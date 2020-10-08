@@ -7,10 +7,13 @@
 
     <!-- General dimensions -->
     <dimen name="dimen_10">10dp</dimen>
+    <dimen name="dimen_30">30dp</dimen>
 
     <!-- Albums list -->
     <dimen name="album_share_icon_size">20dp</dimen>
     <dimen name="corner_radius">5dp</dimen>
     <dimen name="item_margin">6dp</dimen>
 
+    <!-- Album details -->
+    <dimen name="album_image_height">500dp</dimen>
 </resources>

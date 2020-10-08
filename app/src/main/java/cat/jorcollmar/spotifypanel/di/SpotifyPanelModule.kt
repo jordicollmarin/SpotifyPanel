@@ -6,6 +6,7 @@ import cat.jorcollmar.domain.common.SchedulersFacade
 import cat.jorcollmar.domain.repository.SpotifyAlbumsRepositoryContract
 import cat.jorcollmar.spotifypanel.BuildConfig
 import cat.jorcollmar.spotifypanel.ui.SpotifyPanelActivity
+import cat.jorcollmar.spotifypanel.ui.album.view.AlbumDetailsFragment
 import cat.jorcollmar.spotifypanel.ui.album.view.AlbumsListFragment
 import dagger.Binds
 import dagger.Module
@@ -29,6 +30,9 @@ abstract class SpotifyPanelModule {
 
     @ContributesAndroidInjector
     abstract fun contributeAlbumsListFragment(): AlbumsListFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeAlbumDetailsFragment(): AlbumDetailsFragment
 
     @Binds
     abstract fun bindSpotifyAlbumsRepository(repository: SpotifyAlbumsRepository): SpotifyAlbumsRepositoryContract

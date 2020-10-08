@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import cat.jorcollmar.spotifypanel.R
 import cat.jorcollmar.spotifypanel.commons.extensions.observe
@@ -64,7 +65,8 @@ class AlbumsListFragment : DaggerFragment() {
     }
 
     private fun onAlbumClick(album: Album) {
-        // TODO: Navigate to album details
+        viewModel.setSelectedAlbum(album.id)
+        findNavController().navigate(AlbumsListFragmentDirections.actionAlbumsListFragmentToAlbumDetailsFragment())
     }
 
     private fun onShareAlbumClick(albumShareLink: String) {
