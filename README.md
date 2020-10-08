@@ -40,6 +40,9 @@ Clone this repository and import into **Android Studio**
 git clone git@github.com:jordicollmarin/SpotifyPanel.git
 ```
 
+## Configuration
+The App needs a Spotify token to work. You should add the token as a value of the field SPOTIFY_API_TOKEN in the file gradle.properties which is in the root folder of the project. If you need help, send an email to jorcollmar@gmail.com and he will tell you the steps on how to do it.
+
 ## Build
 Build the project in Debug mode like this:
 

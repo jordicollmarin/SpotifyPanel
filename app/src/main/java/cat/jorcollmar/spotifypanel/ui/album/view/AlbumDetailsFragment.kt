@@ -13,6 +13,8 @@ import cat.jorcollmar.spotifypanel.commons.factories.AlertDialogFactory
 import cat.jorcollmar.spotifypanel.commons.utils.IntentUtils
 import cat.jorcollmar.spotifypanel.databinding.FragmentAlbumDetailsBinding
 import cat.jorcollmar.spotifypanel.ui.album.model.Album
+import cat.jorcollmar.spotifypanel.ui.album.view.AlbumViewModel.Companion.GENERAL_ERROR_ALBUM_DETAILS
+import cat.jorcollmar.spotifypanel.ui.album.view.AlbumViewModel.Companion.TOKEN_ERROR
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
@@ -119,7 +121,8 @@ class AlbumDetailsFragment : DaggerFragment() {
         viewLifecycleOwner.observe(viewModel.error, {
             it?.let {
                 when (it) {
-                    AlbumViewModel.ERROR_ALBUM_DETAILS -> showDetailInfoErrorDialog()
+                    GENERAL_ERROR_ALBUM_DETAILS -> showDetailInfoErrorDialog()
+                    TOKEN_ERROR -> showTokenErrorDialog()
                 }
             }
         })
@@ -178,6 +181,18 @@ class AlbumDetailsFragment : DaggerFragment() {
         ) { dialog ->
             dialog.dismiss()
             findNavController().navigateUp()
+        }.show()
+    }
+
+    private fun showTokenErrorDialog() {
+        AlertDialogFactory.createAlertDialog(
+            requireContext(),
+            false,
+            getString(R.string.error_token_error_message),
+            getString(R.string.button_retry)
+        ) { dialog ->
+            dialog.dismiss()
+            viewModel.getAlbums()
         }.show()
     }
 

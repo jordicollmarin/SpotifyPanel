@@ -9,6 +9,7 @@ import cat.jorcollmar.domain.usecase.albums.GetAlbums
 import cat.jorcollmar.spotifypanel.ui.album.mapper.AlbumMapper
 import cat.jorcollmar.spotifypanel.ui.album.model.Album
 import io.reactivex.functions.Consumer
+import retrofit2.HttpException
 import javax.inject.Inject
 
 class AlbumViewModel @Inject constructor(
@@ -50,8 +51,10 @@ class AlbumViewModel @Inject constructor(
             }, Consumer {
                 Log.e(TAG, "GetAlbums: KO. Error: ${it.localizedMessage}")
                 _loading.value = false
-                // TODO: Manage expired token error
-                _error.value = ERROR_ALBUMS
+                when (it) {
+                    is HttpException -> manageHttpException(it, GENERAL_ERROR_ALBUMS)
+                    else -> _error.value = GENERAL_ERROR_ALBUMS
+                }
             }, GetAlbums.Params()
         )
     }
@@ -67,10 +70,19 @@ class AlbumViewModel @Inject constructor(
             }, Consumer {
                 Log.e(TAG, "GetAlbumDetails: KO. Error: ${it.localizedMessage}")
                 _loading.value = false
-                // TODO: Manage expired token error
-                _error.value = ERROR_ALBUM_DETAILS
+                when (it) {
+                    is HttpException -> manageHttpException(it, GENERAL_ERROR_ALBUM_DETAILS)
+                    else -> _error.value = GENERAL_ERROR_ALBUM_DETAILS
+                }
             }, GetAlbumDetails.Params(_selectedAlbumId)
         )
+    }
+
+    private fun manageHttpException(httpException: HttpException, defaultError: Int) {
+        when (httpException.code()) {
+            HTTP_ERROR_CODE_401 -> _error.value = TOKEN_ERROR
+            else -> _error.value = defaultError
+        }
     }
 
     fun setSelectedAlbum(albumId: String) {
@@ -89,7 +101,11 @@ class AlbumViewModel @Inject constructor(
 
     companion object {
         private const val TAG = "AlbumViewModel"
-        const val ERROR_ALBUMS = 1000
-        const val ERROR_ALBUM_DETAILS = 1001
+
+        const val HTTP_ERROR_CODE_401 = 401
+
+        const val GENERAL_ERROR_ALBUMS = 1000
+        const val GENERAL_ERROR_ALBUM_DETAILS = 1001
+        const val TOKEN_ERROR = 9999
     }
 }

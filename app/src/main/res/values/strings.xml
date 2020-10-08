@@ -6,10 +6,12 @@
     <string name="share_album">Share album…</string>
 
     <!-- Buttons -->
+    <string name="button_ok">OK</string>
     <string name="button_retry">Retry</string>
     <string name="button_go_back">Go back</string>
 
     <!-- Errors -->
+    <string name="error_token_error_message">Expired token! Please, read the README file of the project to know how to change the token or ask Jordi on how to do it.</string>
     <string name="error_albums_error_message">There was an error and we could not get the albums. Please try it again.</string>
     <string name="error_album_detail_error_message">There was an error and we could not get album details. Please try it again.</string>
 
