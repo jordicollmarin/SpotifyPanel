@@ -17,6 +17,10 @@ dependencies {
     // Retrofit 2
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_rxadapter_version"
+
+    // Tests
+    testImplementation "junit:junit:$junit_version"
+    testImplementation "io.mockk:mockk:$mockk_version"
 }
 
 sourceCompatibility = "1.7"

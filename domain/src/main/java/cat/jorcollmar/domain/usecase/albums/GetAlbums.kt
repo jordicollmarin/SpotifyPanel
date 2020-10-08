@@ -1,22 +1,22 @@
-package cat.jorcollmar.domain.usecase
+package cat.jorcollmar.domain.usecase.albums
 
 import cat.jorcollmar.domain.common.BaseUseCase
 import cat.jorcollmar.domain.common.SchedulersFacade
 import cat.jorcollmar.domain.model.AlbumDomain
 import cat.jorcollmar.domain.repository.SpotifyAlbumsRepositoryContract
-import io.reactivex.Single
+import io.reactivex.Observable
 import javax.inject.Inject
 
-class GetAlbumDetails @Inject constructor(
+class GetAlbums @Inject constructor(
     schedulers: SchedulersFacade,
     private val spotifyAlbumsRepository: SpotifyAlbumsRepositoryContract
-) : BaseUseCase.RxSingleUseCase<AlbumDomain, GetAlbumDetails.Params>(
+) : BaseUseCase.RxObservableUseCase<List<AlbumDomain>, GetAlbums.Params>(
     schedulers
 ) {
 
-    override fun build(params: Params): Single<AlbumDomain> {
-        return spotifyAlbumsRepository.getAlbumDetails(params.albumId)
+    override fun build(params: Params): Observable<List<AlbumDomain>> {
+        return spotifyAlbumsRepository.getAlbums()
     }
 
-    class Params(val albumId: String)
+    class Params
 }

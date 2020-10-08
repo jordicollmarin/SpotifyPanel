@@ -2,8 +2,8 @@ package cat.jorcollmar.spotifypanel.ui.album.view
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import cat.jorcollmar.domain.usecase.GetAlbumDetails
-import cat.jorcollmar.domain.usecase.GetAlbums
+import cat.jorcollmar.domain.usecase.albums.GetAlbumDetails
+import cat.jorcollmar.domain.usecase.albums.GetAlbums
 import cat.jorcollmar.spotifypanel.ui.album.mapper.AlbumMapper
 import javax.inject.Inject
 

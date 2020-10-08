@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import cat.jorcollmar.domain.usecase.GetAlbumDetails
-import cat.jorcollmar.domain.usecase.GetAlbums
+import cat.jorcollmar.domain.usecase.albums.GetAlbumDetails
+import cat.jorcollmar.domain.usecase.albums.GetAlbums
 import cat.jorcollmar.spotifypanel.ui.album.mapper.AlbumMapper
 import cat.jorcollmar.spotifypanel.ui.album.model.Album
 import io.reactivex.functions.Consumer
@@ -50,6 +50,7 @@ class AlbumViewModel @Inject constructor(
             }, Consumer {
                 Log.e(TAG, "GetAlbums: KO. Error: ${it.localizedMessage}")
                 _loading.value = false
+                // TODO: Manage expired token error
                 _error.value = ERROR_ALBUMS
             }, GetAlbums.Params()
         )
@@ -66,6 +67,7 @@ class AlbumViewModel @Inject constructor(
             }, Consumer {
                 Log.e(TAG, "GetAlbumDetails: KO. Error: ${it.localizedMessage}")
                 _loading.value = false
+                // TODO: Manage expired token error
                 _error.value = ERROR_ALBUM_DETAILS
             }, GetAlbumDetails.Params(_selectedAlbumId)
         )
