@@ -88,6 +88,8 @@ class AlbumViewModel @Inject constructor(
         }
     }
 
+    fun getSelectedAlbumId(): String = _selectedAlbumId
+
     fun setSelectedAlbum(albumId: String) {
         _selectedAlbumId = albumId
     }
