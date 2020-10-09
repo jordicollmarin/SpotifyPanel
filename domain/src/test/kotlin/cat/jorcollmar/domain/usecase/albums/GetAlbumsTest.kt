@@ -3,6 +3,7 @@ package cat.jorcollmar.domain.usecase.albums
 import cat.jorcollmar.domain.BaseUseCaseTest
 import cat.jorcollmar.domain.model.AlbumDomain
 import cat.jorcollmar.domain.model.ArtistDomain
+import cat.jorcollmar.domain.model.PagedAlbumsDomain
 import cat.jorcollmar.domain.repository.SpotifyAlbumsRepositoryContract
 import io.mockk.every
 import io.mockk.mockk
@@ -27,13 +28,11 @@ class GetAlbumsTest : BaseUseCaseTest() {
 
     @Test
     fun `Given GetAlbums execution, GetAlbums from repository is invoked`() {
-        val albumDomainListMockk: List<AlbumDomain> = mockk()
+        val pagedAlbumsDomainMockk: PagedAlbumsDomain = mockk()
 
         every {
             spotifyAlbumsRepository.getAlbums(passedOffset)
-        } returns Single.just(
-            albumDomainListMockk
-        ).toObservable()
+        } returns Single.just(pagedAlbumsDomainMockk).toObservable()
 
         captureResultForUseCase(
             observableUseCase = getAlbums,
@@ -46,18 +45,15 @@ class GetAlbumsTest : BaseUseCaseTest() {
     }
 
     @Test
-    fun `Given GetAlbums execution, When list of albums is returned by the repository, Then same list is returned by the useCase`() {
-        val albumsDomainList: MutableList<AlbumDomain> = mutableListOf()
-        albumsDomainList.add(
-            AlbumDomain("", "", listOf(), "", mapOf(), ArtistDomain("", ""), "", 0)
-        )
+    fun `Given GetAlbums execution, When albums paged result is returned by the repository, Then same albums paged result is returned by the useCase`() {
+        val pagedAlbumsDomain = PagedAlbumsDomain("", listOf(), 0, "", 0, "", 0)
 
         every {
             spotifyAlbumsRepository.getAlbums(passedOffset)
-        } returns Single.just(albumsDomainList.toList()).toObservable()
+        } returns Single.just(pagedAlbumsDomain).toObservable()
 
         Assert.assertEquals(
-            albumsDomainList.toList(),
+            pagedAlbumsDomain,
             captureResultForUseCase(
                 observableUseCase = getAlbums,
                 params = GetAlbums.Params(passedOffset)

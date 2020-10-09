@@ -18,11 +18,12 @@ class AlbumViewModel @Inject constructor(
     private val albumMapper: AlbumMapper
 ) : ViewModel() {
 
+    private lateinit var _selectedAlbumId: String
+    private var _nextPage: String? = null
+
     private val _albums = MutableLiveData<List<Album>>()
     val albums: LiveData<List<Album>>
         get() = _albums
-
-    private lateinit var _selectedAlbumId: String
 
     private var _albumDetailsLoaded: Boolean = false
     val albumDetailsLoaded: Boolean
@@ -42,15 +43,18 @@ class AlbumViewModel @Inject constructor(
 
     fun getAlbums(offset: Int = 0) {
         getAlbums.execute(
-            Consumer { nextAlbums ->
-                Log.d(TAG, "GetAlbums: OK. Next albums size: ${nextAlbums.size}")
+            Consumer { nextPagedAlbums ->
+                Log.d(TAG, "GetAlbums: OK. Current petition: ${nextPagedAlbums.href}")
 
-                _albums.value?.let { currentAlbums ->
-                    val totalAlbums = currentAlbums.toMutableList()
-                    totalAlbums.addAll(albumMapper.map(nextAlbums))
-                    _albums.value = totalAlbums
-                } ?: run {
-                    _albums.value = albumMapper.map(nextAlbums)
+                _nextPage = nextPagedAlbums.next
+                nextPagedAlbums.items?.let {
+                    _albums.value?.let { currentAlbums ->
+                        val totalAlbums = currentAlbums.toMutableList()
+                        totalAlbums.addAll(albumMapper.map(it))
+                        _albums.value = totalAlbums
+                    } ?: run {
+                        _albums.value = albumMapper.map(it)
+                    }
                 }
             }, Consumer {
                 Log.e(TAG, "GetAlbums: KO. Error: ${it.localizedMessage}")
@@ -87,6 +91,8 @@ class AlbumViewModel @Inject constructor(
             else -> _error.value = defaultError
         }
     }
+
+    fun getNextAlbumsPage(): String? = _nextPage
 
     fun getSelectedAlbumId(): String = _selectedAlbumId
 

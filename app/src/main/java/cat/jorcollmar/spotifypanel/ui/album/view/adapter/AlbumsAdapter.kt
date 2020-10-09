@@ -19,9 +19,11 @@ class AlbumsAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var albumsList: MutableList<Album> = mutableListOf()
+    private var nextAlbumsPage: String? = null
 
-    fun addItems(albums: List<Album>) {
+    fun addItems(albums: List<Album>, nextPage: String?) {
         albumsList = albums.toMutableList()
+        nextAlbumsPage = nextPage
         notifyDataSetChanged()
     }
 
@@ -49,7 +51,7 @@ class AlbumsAdapter(
 
     override fun getItemCount(): Int {
         val itemCount = albumsList.size
-        return if (itemCount == ALBUMS_MAX_RESULTS) {
+        return if (nextAlbumsPage == null && albumsList.size > 0) {
             itemCount
         } else {
             itemCount + 1
@@ -112,7 +114,5 @@ class AlbumsAdapter(
     companion object {
         const val LOADING_TYPE = 0
         const val ALBUM_TYPE = 1
-
-        const val ALBUMS_MAX_RESULTS = 100
     }
 }

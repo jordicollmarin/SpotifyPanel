@@ -1,11 +1,14 @@
 package cat.jorcollmar.data.repository
 
 import cat.jorcollmar.data.mapper.AlbumDataMapper
+import cat.jorcollmar.data.mapper.PagedAlbumsDataMapper
 import cat.jorcollmar.data.model.AlbumData
 import cat.jorcollmar.data.model.ArtistData
+import cat.jorcollmar.data.model.PagedAlbumsData
 import cat.jorcollmar.data.source.spotify.SpotifyApiDataSource
 import cat.jorcollmar.domain.model.AlbumDomain
 import cat.jorcollmar.domain.model.ArtistDomain
+import cat.jorcollmar.domain.model.PagedAlbumsDomain
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -19,46 +22,38 @@ import org.junit.Test
 class SpotifyAlbumsRepositoryTest {
     private val spotifyApiDataSource: SpotifyApiDataSource = mockk(relaxed = true)
     private val albumDataMapper: AlbumDataMapper = mockk(relaxed = true)
+    private val pagedAlbumsDataMapper: PagedAlbumsDataMapper = mockk(relaxed = true)
 
     private lateinit var spotifyAlbumsRepository: SpotifyAlbumsRepository
 
     private val passedAlbumId = "albumId"
     private val passedOffset = 0
 
+    private val pagedAlbumsDomain = PagedAlbumsDomain("", listOf(), 0, "", 0, "", 0)
+
     private val albumDomain =
         AlbumDomain("", "", listOf(), "", mapOf(), ArtistDomain("", ""), "", 0)
 
-    private val albumsDomain: List<AlbumDomain> = mutableListOf<AlbumDomain>().apply {
-        add(
-            AlbumDomain("", "", listOf(), "", mapOf(), ArtistDomain("", ""), "", 0)
-        )
-    }
+    private val pagedAlbumsData = PagedAlbumsData("", listOf(), 0, "", 0, "", 0)
 
     private val albumData = AlbumData("", "", listOf(), "", mapOf(), ArtistData("", ""), "", 0)
 
-    private val albumsData: List<AlbumData> = mutableListOf<AlbumData>().apply {
-        add(
-            AlbumData("", "", listOf(), "", mapOf(), ArtistData("", ""), "", 0)
-        )
-    }
-
     @Before
     fun setUp() {
-        spotifyAlbumsRepository = SpotifyAlbumsRepository(spotifyApiDataSource, albumDataMapper)
+        spotifyAlbumsRepository =
+            SpotifyAlbumsRepository(spotifyApiDataSource, albumDataMapper, pagedAlbumsDataMapper)
     }
 
     @Test
-    fun `When getAlbums is called And getAlbums from repository returns a list of albums, Then return it`() {
+    fun `When getAlbums is called And getAlbums from repository returns an albums paged result, Then return it`() {
         every {
             spotifyApiDataSource.getAlbums(passedOffset)
-        } returns Single.just(
-            albumsData
-        ).toObservable()
+        } returns Single.just(pagedAlbumsData).toObservable()
 
-        every { albumDataMapper.map(any<List<AlbumData>>()) } returns albumsDomain
+        every { pagedAlbumsDataMapper.map(any<PagedAlbumsData>()) } returns pagedAlbumsDomain
 
         val observable = spotifyAlbumsRepository.getAlbums(passedOffset)
-        val testObserver = TestObserver<List<AlbumDomain>>()
+        val testObserver = TestObserver<PagedAlbumsDomain>()
         observable.subscribe(testObserver)
 
         testObserver.assertComplete()
@@ -68,7 +63,8 @@ class SpotifyAlbumsRepositoryTest {
         verify {
             spotifyApiDataSource.getAlbums(passedOffset)
         }
-        Assert.assertEquals(albumsDomain, testObserver.values()[0])
+
+        Assert.assertEquals(pagedAlbumsDomain, testObserver.values()[0])
     }
 
     @Test
@@ -81,7 +77,7 @@ class SpotifyAlbumsRepositoryTest {
 
         val observable = spotifyAlbumsRepository.getAlbums(passedOffset)
 
-        val testObserver = TestObserver<List<AlbumDomain>>()
+        val testObserver = TestObserver<PagedAlbumsDomain>()
         observable.subscribe(testObserver)
 
         testObserver.assertNotComplete()

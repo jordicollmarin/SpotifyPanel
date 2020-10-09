@@ -76,7 +76,7 @@ class AlbumsListFragment : DaggerFragment() {
     private fun initObservers() {
         viewLifecycleOwner.observe(viewModel.albums, {
             it?.let {
-                albumsAdapter.addItems(it)
+                albumsAdapter.addItems(it, viewModel.getNextAlbumsPage())
             }
         })
 
