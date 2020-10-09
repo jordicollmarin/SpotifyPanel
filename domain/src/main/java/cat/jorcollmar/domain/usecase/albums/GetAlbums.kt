@@ -15,8 +15,8 @@ class GetAlbums @Inject constructor(
 ) {
 
     override fun build(params: Params): Observable<List<AlbumDomain>> {
-        return spotifyAlbumsRepository.getAlbums()
+        return spotifyAlbumsRepository.getAlbums(params.offset)
     }
 
-    class Params
+    class Params(val offset: Int)
 }

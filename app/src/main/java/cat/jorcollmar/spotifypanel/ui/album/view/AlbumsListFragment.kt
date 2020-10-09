@@ -29,7 +29,7 @@ class AlbumsListFragment : DaggerFragment() {
     lateinit var viewModelFactory: AlbumViewModelFactory
 
     private val albumsAdapter: AlbumsAdapter by lazy {
-        AlbumsAdapter(::onAlbumClick, ::onShareAlbumClick)
+        AlbumsAdapter(::onAlbumClick, ::onShareAlbumClick) { viewModel.getAlbums(it) }
     }
 
     private val viewModel: AlbumViewModel by lazy {
@@ -39,7 +39,6 @@ class AlbumsListFragment : DaggerFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(false)
-        viewModel.getAlbums()
     }
 
     override fun onCreateView(
@@ -75,28 +74,9 @@ class AlbumsListFragment : DaggerFragment() {
     }
 
     private fun initObservers() {
-        viewLifecycleOwner.observe(viewModel.loading, {
-            it?.let {
-                if (it) {
-                    binding.prbAlbums.visibility = View.VISIBLE
-                    binding.rcvAlbums.visibility = View.GONE
-                } else {
-                    binding.prbAlbums.visibility = View.GONE
-                    binding.rcvAlbums.visibility = View.VISIBLE
-                }
-            } ?: run {
-                binding.prbAlbums.visibility = View.GONE
-            }
-        })
-
         viewLifecycleOwner.observe(viewModel.albums, {
             it?.let {
-                if (it.isEmpty()) {
-                    binding.rcvAlbums.visibility = View.GONE
-                } else {
-                    binding.rcvAlbums.visibility = View.VISIBLE
-                    albumsAdapter.updateItems(it)
-                }
+                albumsAdapter.addItems(it)
             }
         })
 

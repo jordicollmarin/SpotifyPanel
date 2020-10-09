@@ -5,10 +5,11 @@ import cat.jorcollmar.data.model.dto.SpotifyAlbumsResultDto
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface SpotifyWebservice {
     @GET(ALBUMS_NEW_RELEASES_ENDPOINT)
-    fun getAlbums(): Single<SpotifyAlbumsResultDto>
+    fun getAlbums(@Query("offset") offset: Int): Single<SpotifyAlbumsResultDto>
 
     @GET(ALBUM_DETAILS_ENDPOINT)
     fun getAlbumDetails(@Path("id") id: String): Single<AlbumDto>
