@@ -40,22 +40,25 @@ class AlbumViewModel @Inject constructor(
     val error: LiveData<Int>
         get() = _error
 
-    fun getAlbums() {
-        _loading.value = true
-
+    fun getAlbums(offset: Int = 0) {
         getAlbums.execute(
-            Consumer {
-                Log.d(TAG, "GetAlbums: OK. Albums: ${it.size}")
-                _loading.value = false
-                _albums.value = albumMapper.map(it)
+            Consumer { nextAlbums ->
+                Log.d(TAG, "GetAlbums: OK. Next albums size: ${nextAlbums.size}")
+
+                _albums.value?.let { currentAlbums ->
+                    val totalAlbums = currentAlbums.toMutableList()
+                    totalAlbums.addAll(albumMapper.map(nextAlbums))
+                    _albums.value = totalAlbums
+                } ?: run {
+                    _albums.value = albumMapper.map(nextAlbums)
+                }
             }, Consumer {
                 Log.e(TAG, "GetAlbums: KO. Error: ${it.localizedMessage}")
-                _loading.value = false
                 when (it) {
                     is HttpException -> manageHttpException(it, GENERAL_ERROR_ALBUMS)
                     else -> _error.value = GENERAL_ERROR_ALBUMS
                 }
-            }, GetAlbums.Params()
+            }, GetAlbums.Params(offset)
         )
     }
 

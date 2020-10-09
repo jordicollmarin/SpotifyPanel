@@ -11,8 +11,8 @@ class SpotifyApiDataSource @Inject constructor(
     private val spotifyWebservice: SpotifyWebservice,
     private val albumDtoMapper: AlbumDtoMapper
 ) {
-    fun getAlbums(): Observable<List<AlbumData>> =
-        spotifyWebservice.getAlbums().flatMapObservable {
+    fun getAlbums(offset: Int): Observable<List<AlbumData>> =
+        spotifyWebservice.getAlbums(offset).flatMapObservable {
             it.albums?.let { pagedAlbumDto ->
                 Single.just(albumDtoMapper.map(pagedAlbumDto.items)).toObservable()
             }

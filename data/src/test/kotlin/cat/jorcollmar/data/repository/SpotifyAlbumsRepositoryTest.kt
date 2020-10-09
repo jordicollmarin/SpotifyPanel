@@ -23,6 +23,7 @@ class SpotifyAlbumsRepositoryTest {
     private lateinit var spotifyAlbumsRepository: SpotifyAlbumsRepository
 
     private val passedAlbumId = "albumId"
+    private val passedOffset = 0
 
     private val albumDomain =
         AlbumDomain("", "", listOf(), "", mapOf(), ArtistDomain("", ""), "", 0)
@@ -49,14 +50,14 @@ class SpotifyAlbumsRepositoryTest {
     @Test
     fun `When getAlbums is called And getAlbums from repository returns a list of albums, Then return it`() {
         every {
-            spotifyApiDataSource.getAlbums()
+            spotifyApiDataSource.getAlbums(passedOffset)
         } returns Single.just(
             albumsData
         ).toObservable()
 
         every { albumDataMapper.map(any<List<AlbumData>>()) } returns albumsDomain
 
-        val observable = spotifyAlbumsRepository.getAlbums()
+        val observable = spotifyAlbumsRepository.getAlbums(passedOffset)
         val testObserver = TestObserver<List<AlbumDomain>>()
         observable.subscribe(testObserver)
 
@@ -65,7 +66,7 @@ class SpotifyAlbumsRepositoryTest {
         testObserver.assertValueCount(1)
 
         verify {
-            spotifyApiDataSource.getAlbums()
+            spotifyApiDataSource.getAlbums(passedOffset)
         }
         Assert.assertEquals(albumsDomain, testObserver.values()[0])
     }
@@ -75,10 +76,10 @@ class SpotifyAlbumsRepositoryTest {
         val error = Throwable("GetAlbumsThrowable")
 
         every {
-            spotifyApiDataSource.getAlbums()
+            spotifyApiDataSource.getAlbums(passedOffset)
         } returns Observable.error(error)
 
-        val observable = spotifyAlbumsRepository.getAlbums()
+        val observable = spotifyAlbumsRepository.getAlbums(passedOffset)
 
         val testObserver = TestObserver<List<AlbumDomain>>()
         observable.subscribe(testObserver)
@@ -86,7 +87,7 @@ class SpotifyAlbumsRepositoryTest {
         testObserver.assertNotComplete()
         testObserver.assertError(error)
         verify {
-            spotifyApiDataSource.getAlbums()
+            spotifyApiDataSource.getAlbums(passedOffset)
         }
     }
 

@@ -13,7 +13,7 @@ class SpotifyAlbumsRepository @Inject constructor(
     private val albumDataMapper: AlbumDataMapper
 ) : SpotifyAlbumsRepositoryContract {
 
-    override fun getAlbums(): Observable<List<AlbumDomain>> = spotifyApiDataSource.getAlbums().map {
+    override fun getAlbums(offset: Int): Observable<List<AlbumDomain>> = spotifyApiDataSource.getAlbums(offset).map {
         albumDataMapper.map(it)
     }
 

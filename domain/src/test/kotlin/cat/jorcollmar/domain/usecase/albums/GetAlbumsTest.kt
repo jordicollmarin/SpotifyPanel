@@ -18,6 +18,8 @@ class GetAlbumsTest : BaseUseCaseTest() {
     private val spotifyAlbumsRepository: SpotifyAlbumsRepositoryContract = mockk(relaxed = true)
     private lateinit var getAlbums: GetAlbums
 
+    private val passedOffset = 0
+
     @Before
     fun setUpTest() {
         getAlbums = GetAlbums(schedulersFacade, spotifyAlbumsRepository)
@@ -28,18 +30,18 @@ class GetAlbumsTest : BaseUseCaseTest() {
         val albumDomainListMockk: List<AlbumDomain> = mockk()
 
         every {
-            spotifyAlbumsRepository.getAlbums()
+            spotifyAlbumsRepository.getAlbums(passedOffset)
         } returns Single.just(
             albumDomainListMockk
         ).toObservable()
 
         captureResultForUseCase(
             observableUseCase = getAlbums,
-            params = GetAlbums.Params()
+            params = GetAlbums.Params(passedOffset)
         )
 
         verify {
-            spotifyAlbumsRepository.getAlbums()
+            spotifyAlbumsRepository.getAlbums(passedOffset)
         }
     }
 
@@ -51,14 +53,14 @@ class GetAlbumsTest : BaseUseCaseTest() {
         )
 
         every {
-            spotifyAlbumsRepository.getAlbums()
+            spotifyAlbumsRepository.getAlbums(passedOffset)
         } returns Single.just(albumsDomainList.toList()).toObservable()
 
         Assert.assertEquals(
             albumsDomainList.toList(),
             captureResultForUseCase(
                 observableUseCase = getAlbums,
-                params = GetAlbums.Params()
+                params = GetAlbums.Params(passedOffset)
             )
         )
     }
@@ -68,14 +70,14 @@ class GetAlbumsTest : BaseUseCaseTest() {
         val throwable = Throwable("GetAlbumsThrowable")
 
         every {
-            spotifyAlbumsRepository.getAlbums()
+            spotifyAlbumsRepository.getAlbums(passedOffset)
         } returns Observable.error(throwable)
 
         Assert.assertEquals(
             throwable,
             captureErrorForUseCase(
                 observableUseCase = getAlbums,
-                params = GetAlbums.Params()
+                params = GetAlbums.Params(passedOffset)
             )
         )
     }
