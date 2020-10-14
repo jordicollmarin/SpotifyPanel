@@ -46,7 +46,7 @@ class AlbumViewModel @Inject constructor(
             Consumer { nextPagedAlbums ->
                 Log.d(TAG, "GetAlbums: OK. Current petition: ${nextPagedAlbums.href}")
 
-                _nextPage = nextPagedAlbums.next
+                setAlbumsNextPage(nextPagedAlbums.next)
                 nextPagedAlbums.items?.let {
                     _albums.value?.let { currentAlbums ->
                         val totalAlbums = currentAlbums.toMutableList()
@@ -94,9 +94,13 @@ class AlbumViewModel @Inject constructor(
 
     fun getNextAlbumsPage(): String? = _nextPage
 
+    fun setAlbumsNextPage(nextPage: String?) {
+        _nextPage = nextPage
+    }
+
     fun getSelectedAlbumId(): String = _selectedAlbumId
 
-    fun setSelectedAlbum(albumId: String) {
+    fun setSelectedAlbumId(albumId: String) {
         _selectedAlbumId = albumId
     }
 

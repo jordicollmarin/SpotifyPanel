@@ -65,7 +65,7 @@ class AlbumsListFragment : DaggerFragment() {
     }
 
     private fun onAlbumClick(album: Album) {
-        viewModel.setSelectedAlbum(album.id)
+        viewModel.setSelectedAlbumId(album.id)
         findNavController().navigate(AlbumsListFragmentDirections.actionAlbumsListFragmentToAlbumDetailsFragment())
     }
 
