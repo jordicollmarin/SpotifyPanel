@@ -3,12 +3,17 @@ package cat.jorcollmar.spotifypanel.ui.album.view
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import cat.jorcollmar.domain.model.AlbumDomain
 import cat.jorcollmar.domain.model.ArtistDomain
+import cat.jorcollmar.domain.model.PagedAlbumsDomain
 import cat.jorcollmar.domain.usecase.albums.GetAlbumDetails
 import cat.jorcollmar.domain.usecase.albums.GetAlbums
 import cat.jorcollmar.spotifypanel.ui.album.mapper.AlbumMapper
+import cat.jorcollmar.spotifypanel.ui.album.model.Album
+import cat.jorcollmar.spotifypanel.ui.album.model.Artist
+import cat.jorcollmar.spotifypanel.ui.album.view.AlbumViewModel.Companion.GENERAL_ERROR_ALBUMS
 import cat.jorcollmar.spotifypanel.ui.album.view.AlbumViewModel.Companion.GENERAL_ERROR_ALBUM_DETAILS
 import cat.jorcollmar.spotifypanel.ui.album.view.AlbumViewModel.Companion.HTTP_ERROR_CODE_401
 import cat.jorcollmar.spotifypanel.ui.album.view.AlbumViewModel.Companion.TOKEN_ERROR
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
@@ -60,6 +65,84 @@ class AlbumViewModelTest {
         Assert.assertEquals(isLoaded, viewModel.albumDetailsLoaded)
     }
 
+    /* GET ALBUMS */
+    @Test
+    fun `When getAlbums is executed with no parameter, Then getAlbums use case is executed with a 0 as value of Params`() {
+        viewModel.getAlbums()
+
+        val slot = slot<GetAlbums.Params>()
+        verify { getAlbums.execute(any(), any(), capture(slot)) }
+        Assert.assertEquals(0, slot.captured.offset)
+    }
+
+    @Test
+    fun `When getAlbums is executed with an Int as a parameter, Then getAlbums use case is executed with the same parameter`() {
+        viewModel.getAlbums(2)
+
+        val slot = slot<GetAlbums.Params>()
+        verify { getAlbums.execute(any(), any(), capture(slot)) }
+        Assert.assertEquals(2, slot.captured.offset)
+    }
+
+    @Test
+    fun `When getAlbums is executed satisfactory, Then _nextPage value is assigned with the value of field 'next' from the result`() {
+        val pagedAlbumsDomain = PagedAlbumsDomain("", listOf(), 0, "", 0, "", 0)
+        viewModel.getAlbums()
+
+        val slot = slot<Consumer<PagedAlbumsDomain>>()
+        verify { getAlbums.execute(capture(slot), any(), any()) }
+        slot.captured.accept(pagedAlbumsDomain)
+
+        Assert.assertEquals(pagedAlbumsDomain.next, viewModel.getNextAlbumsPage())
+    }
+
+    @Test
+    fun `When getAlbums is executed satisfactory And there are albums in the response, Then _albums will contain these albums after being mapped to app layer models`() {
+        val albumDomainList = listOf(AlbumDomain("", "", listOf(), "", mapOf(), ArtistDomain("", ""), "", 0))
+        val albumList = listOf(Album("", "", listOf(), "", mapOf(), Artist("", ""), "", 0))
+
+        val pagedAlbumsDomain = PagedAlbumsDomain("", albumDomainList, 0, "", 0, "", 0)
+
+        every { albumMapper.map(any<List<AlbumDomain>>()) } returns albumList
+
+        viewModel.getAlbums()
+
+        val slot = slot<Consumer<PagedAlbumsDomain>>()
+        verify { getAlbums.execute(capture(slot), any(), any()) }
+        slot.captured.accept(pagedAlbumsDomain)
+
+        Assert.assertTrue(viewModel.albums.value!!.containsAll(albumList))
+    }
+
+    @Test
+    fun `When getAlbums is executed And returns a HttpException with code 401, Then _error value is assigned with TOKEN_ERROR constant value`() {
+        val httpException401: Response<AlbumDomain> =
+            Response.error(HTTP_ERROR_CODE_401, ResponseBody.create(MediaType.parse(""), ""))
+
+        val httpException = HttpException(httpException401)
+        viewModel.getAlbums()
+
+        val slot = slot<Consumer<Throwable>>()
+        verify { getAlbums.execute(any(), capture(slot), any()) }
+        slot.captured.accept(httpException)
+
+        Assert.assertEquals(TOKEN_ERROR, viewModel.error.value)
+    }
+
+    @Test
+    fun `When getAlbums is executed And returns an error different from HttpException with code 401, Then _error value is assigned with GENERAL_ERROR_ALBUMS constant value`() {
+        val throwable = Throwable("GetAlbumDetailsThrowable")
+
+        viewModel.getAlbums()
+
+        val slot = slot<Consumer<Throwable>>()
+        verify { getAlbums.execute(any(), capture(slot), any()) }
+        slot.captured.accept(throwable)
+
+        Assert.assertEquals(GENERAL_ERROR_ALBUMS, viewModel.error.value)
+    }
+
+    /* GET ALBUM DETAILS */
     @Test
     fun `When getAlbumDetails is executed, Then _loading value is assigned with true`() {
         val albumId = "albumId"
